@@ -17,14 +17,14 @@ float P1[3] = {size, -size, -size}; //P2 da curva de Bezier
 float P2[3] = {-size, 0, -size}; //P3 da curva de Bezier
 float P3[3] = {0.0f, 10.0f, -20.0f}; //P4 da curva de Bezier
 
-/*Funcao que calcula um valor na curva de Bezier.
+/*Funcao que calcula as coordenadas de um ponto na curva de Bezier.
 
     Entrada:
         t -> valor da posicao na curva
-        result -> vetor onde fica armazenado as coordenadas 3D da curva correspondente
+        result -> vetor onde fica armazenado as coordenadas 3D do ponto calculado
 */
 void bezierPoint(float t, float* result) {
-    //Calcula a funcao de Bezier dos pontos usando a formula abaixo:
+    //Calcula o valor dos pontos na curva de Bezier usando a formula de curvas cúbicas (com 4 pontos de controle):
     // B(i) = u³.P1[i] + 3.u².t.P2[i] + 3.u.t².P3[i] + t³.P4[i]
     //Em que u = 1 - t e i indica a cooordenada (0=x,1=y,2=z)
 
@@ -45,7 +45,7 @@ void bezierPoint(float t, float* result) {
 /*Funcao que gerencia o tempo da animacao
 
     Entrada:
-        value -> valor passado pelo timer (nao utilizado, mas necessario para a funcao do timer)
+        value -> valor passado pelo timer (nao utilizado, mas necessario para a chamada da funcao glutTimerFunc)
 */
 void introTimer(int value) {
     //Primeiro testa se a animacao ainda continua
@@ -145,7 +145,7 @@ void drawSkybox() {
     glEnable(GL_LIGHTING);
 }
 
-/*Desenha uma setinha da cabeça da cobra ate a fruta, facilitando os jogadores
+/*Desenha uma setinha da cabeça da cobra ate a fruta, facilitando para os jogadores
 
     Entradas:
         snake -> Referencia para a cobra
@@ -225,7 +225,7 @@ void setCameraAnimation(Snake& snake){
     gluLookAt(camPos[0], camPos[1], camPos[2], snake.getPosX(), snake.getPosY(), snake.getPosZ(), 0.0f, 1.0f, 0.0f);
 }
 
-/*Funcao que seta a camera na posicao que o jogo utiliza
+/*Funcao que seta o angulo da camera na posicao que o jogo utiliza
     Entrada:
         snake -> Referencia para a cobra
 */
@@ -234,7 +234,7 @@ void setCameraAngled(Snake& snake){
     float far = 20.0f; //Essa controla o quao longe a camera fica
     float height = 10.0f; // Essa controla o quao alto a camera fica
 
-    /*Agora converte o angulo em radiano, pois e o que as funcoes do math utiliza*/
+    /*Agora converte o angulo em radiano ao multiplicar por pi e dividir por 180, pois e o formato usado pelas funcoes do math*/
     float radY = snake.getAngleY() * M_PI / 180.0f;
 
     /*Agora calcula a posicao da camera com base na posicao da cobra e nos parametros*/
@@ -246,5 +246,5 @@ void setCameraAngled(Snake& snake){
     glLoadIdentity();
     gluLookAt(camX, camY, camZ,       //Posicao da camera
               snake.getPosX(), snake.getPosY(), snake.getPosZ(), // Olhando para a cobra
-              0.0f, 1.0f, 0.0f);
+              0.0f, 1.0f, 0.0f); // com Vup alinhado ao eixo Y
 }
